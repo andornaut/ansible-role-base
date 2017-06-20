@@ -1,0 +1,7 @@
+---
+galaxy_info:
+  author: andornaut
+  description: Base packages and configuration
+  license: MIT
+  min_ansible_version: 1.2
+  galaxy_tags: []

@@ -1,0 +1,92 @@
+--- 
+- name: Install system packages
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  with_items:
+    - acpi
+    - apt-transport-https
+    - atool
+    - atop
+    - autotools-dev
+    - bash
+    - build-essential
+    - ca-certificates
+    - cifs-utils
+    - cmake
+    - coreutils
+    - cups
+    - curl
+    - debconf-utils
+    - dnsutils
+    - elinks
+    - exuberant-ctags
+    - fakeroot
+    - fonts-font-awesome
+    - fonts-inconsolata
+    - fonts-roboto
+    - gcc
+    - git
+    - highlight
+    - htop
+    - i2c-tools
+    - iftop
+    - iotop
+    - iperf
+    - irssi
+    - laptop-mode-tools
+    - libc6
+    - libfontconfig
+    - libfreetype6
+    - libfreetype6-dev
+    - linux-firmware-nonfree
+    - lm-sensors
+    - make
+    - mercurial
+    - mpv
+    - mutt
+    - ncftp
+    - nethogs
+    - nmap
+    - ntpdate
+    - openconnect
+    - openvpn
+    - powertop
+    - python-software-properties
+    - ranger
+    - rsync
+    - samba
+    - screen
+    - smartmontools
+    - smbclient
+    - software-center
+    - software-properties-common
+    - sox
+    - ssh
+    - sysstat
+    - tmux
+    - tree
+    - ubuntu-drivers-common
+    - ubuntu-restricted-extras
+    - unzip
+    - vim
+    - wget
+    - whois
+    - zip
+  become: true
+
+- name: Enable multiverse repositories
+  command: add-apt-repository multiverse
+  become: true
+
+- name: Install binary drivers
+  command: ubuntu-drivers autoinstall
+  become: true
+
+- name: set timezone
+  timezone:
+    name: {{ timezone }}
+
+- include: mscorefonts.yml
+- include: source-code-pro.yml
