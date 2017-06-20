@@ -52,6 +52,7 @@
     - ntpdate
     - openconnect
     - openvpn
+    - perl
     - powertop
     - python-software-properties
     - ranger
