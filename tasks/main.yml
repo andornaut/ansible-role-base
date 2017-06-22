@@ -84,6 +84,7 @@
 - name: set timezone
   timezone:
     name: "{{ timezone }}"
+  become: true
 
 - include: mscorefonts.yml
 - include: source-code-pro.yml
