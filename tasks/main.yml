@@ -85,6 +85,7 @@
   timezone:
     name: "{{ timezone }}"
   become: true
+  become_method: sudo
 
 - include: mscorefonts.yml
 - include: source-code-pro.yml
