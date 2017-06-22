@@ -10,11 +10,5 @@
   copy:
     src: /tmp/source-code-pro-2.030R-ro-1.050R-it/TTF/
     dest: /usr/share/fonts/truetype/source-code-pro
-  register: source_code_pro_files
+  notify: update font cache
   become: true
-
-- name: Update font cache
-  command: fc-cache
-  when: source_code_pro_files.changed
-  become: true
-
