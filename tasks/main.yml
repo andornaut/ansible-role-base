@@ -40,7 +40,7 @@
     - libfontconfig
     - libfreetype6
     - libfreetype6-dev
-    - linux-firmware-nonfree
+    - linux-firmware
     - lm-sensors
     - make
     - mercurial
@@ -79,10 +79,6 @@
 
 - name: Enable multiverse repositories
   command: add-apt-repository multiverse
-  become: true
-
-- name: Install binary drivers
-  command: ubuntu-drivers autoinstall
   become: true
 
 - name: set timezone
