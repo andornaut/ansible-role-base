@@ -85,7 +85,13 @@
   timezone:
     name: "{{ timezone }}"
   become: true
-  become_method: sudo
+
+- name: Install storage-space-alert
+  get_url:
+    url: https://raw.githubusercontent.com/andornaut/storage-space-alert/master/storage-space-alert
+    dest: /usr/local/bin/storage-space-alert
+    mode: 0755
+  become: true
 
 - include: mscorefonts.yml
 - include: source-code-pro.yml
