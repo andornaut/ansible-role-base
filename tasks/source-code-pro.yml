@@ -6,10 +6,11 @@
     remote_src: yes
     creates: /tmp/source-code-pro-2.030R-ro-1.050R-it
 
-- name: Copy source-code-pro TTF files
-  synchronize:
-    src: /tmp/source-code-pro-2.030R-ro-1.050R-it/TTF/
-    dest: /usr/share/fonts/truetype/source-code-pro
-  delegate_to: "{{ inventory_hostname }}"
-  notify: Update font cache
-  become: true
+# FIXME: This does not work without ssh-agent forwarding. Disabling for now.
+#- name: Copy source-code-pro TTF files
+#  synchronize:
+#    src: /tmp/source-code-pro-2.030R-ro-1.050R-it/TTF/
+#    dest: /usr/share/fonts/truetype/source-code-pro
+#  delegate_to: "{{ inventory_hostname }}"
+#  notify: Update font cache
+#  become: true
