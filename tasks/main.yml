@@ -77,7 +77,10 @@
   become: true
 
 - name: Enable multiverse repositories
-  command: add-apt-repository multiverse
+  command: add-apt-repository {{ item }}
+  with_items:
+    - multiverse
+    - universe
   become: true
 
 - name: set timezone
