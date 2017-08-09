@@ -90,6 +90,7 @@
 
 - name: Re-map capslock key to escape key
   command: localectl set-x11-keymap "" "" "" caps:escape
+  become: true
 
 - name: Install storage-space-alert
   get_url:
