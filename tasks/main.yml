@@ -99,5 +99,9 @@
     mode: 0755
   become: true
 
-- include: mscorefonts.yml
-- include: source-code-pro.yml
+- name: Install dfm
+  get_url:
+    url: https://github.com/justone/dotfiles/blob/master/bin/dfm
+    dest: /usr/local/bin/dfm
+    mode: 0755
+  become: true
