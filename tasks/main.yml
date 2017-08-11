@@ -101,7 +101,7 @@
 
 - name: Install dfm
   get_url:
-    url: https://github.com/justone/dotfiles/blob/master/bin/dfm
+    url: https://raw.githubusercontent.com/justone/dotfiles/master/bin/dfm
     dest: /usr/local/bin/dfm
     mode: 0755
   become: true
