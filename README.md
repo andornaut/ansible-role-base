@@ -1,6 +1,6 @@
 # ansible-role-base
 
-Base packages and configurations for Ubuntu
+Base packages and configurations for Ubuntu.
 
 ## Variables
 
