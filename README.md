@@ -4,7 +4,7 @@ Base packages and configurations for Ubuntu
 
 ## Variables
 
-See [default values](./defaults/main.yml)
+See [default values](./defaults/main.yml).
 
 Name|Description
 ---|---
