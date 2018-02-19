@@ -100,9 +100,9 @@
     mode: 0755
   become: true
 
-- name: Install dfm
+- name: Install gog
   get_url:
-    url: https://raw.githubusercontent.com/justone/dotfiles/master/bin/dfm
-    dest: /usr/local/bin/dfm
+    url: https://github.com/andornaut/gog/releases/download/v{{ gog_version }}/gog-linux-amd64
+    dest: /usr/local/bin/gog
     mode: 0755
   become: true
