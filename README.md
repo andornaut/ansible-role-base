@@ -8,4 +8,5 @@ See [default values](./defaults/main.yml).
 
 Name|Description
 ---|---
+gog_version|[gog release](https://github.com/andornaut/gog/releases) version number
 timezone|System timezone
