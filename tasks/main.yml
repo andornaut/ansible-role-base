@@ -50,6 +50,7 @@
     - nmap
     - ntpdate
     - openconnect
+    - openresolv
     - openvpn
     - perl
     - powertop
