@@ -1,4 +1,4 @@
---- 
+---
 - name: Install system packages
   apt:
     name: "{{ item }}"
@@ -86,7 +86,7 @@
 
 - name: set timezone
   timezone:
-    name: "{{ timezone }}"
+    name: "{{ base_timezone }}"
   become: true
 
 - name: Re-map capslock key to escape key
@@ -105,7 +105,7 @@
   uri:
     url: https://api.github.com/repos/andornaut/gog/releases/latest
     return_content: "yes"
-  register: gog_version 
+  register: gog_version
 
 - name: Install gog
   get_url:
