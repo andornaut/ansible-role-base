@@ -21,6 +21,8 @@
     - debconf-utils
     - dnsutils
     - elinks
+    - exfat-fuse
+    - exfat-utils
     - exuberant-ctags
     - fakeroot
     - fonts-font-awesome
