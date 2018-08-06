@@ -63,7 +63,7 @@
     - screen
     - smartmontools
     - smbclient
-    - "{% if ansible_distribution_release == 'xenial' %}software-center{% else %}gnome-software{% endif %}"
+    - software-center
     - software-properties-common
     - sox
     - ssh
