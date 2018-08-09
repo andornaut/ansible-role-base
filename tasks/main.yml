@@ -1,4 +1,4 @@
---- 
+---
 - name: Install system packages
   apt:
     name: "{{ item }}"
@@ -22,6 +22,8 @@
     - debconf-utils
     - dnsutils
     - elinks
+    - exfat-fuse
+    - exfat-utils
     - exuberant-ctags
     - fakeroot
     - fonts-font-awesome
@@ -51,6 +53,7 @@
     - nmap
     - ntpdate
     - openconnect
+    - openresolv
     - openvpn
     - perl
     - powertop
@@ -61,7 +64,6 @@
     - screen
     - smartmontools
     - smbclient
-    - "{% if ansible_distribution_release == 'xenial' %}software-center{% else %}gnome-software{% endif %}"
     - software-properties-common
     - sox
     - ssh
@@ -86,11 +88,12 @@
 
 - name: set timezone
   timezone:
-    name: "{{ timezone }}"
+    name: "{{ base_timezone }}"
   become: true
 
 - name: Re-map capslock key to escape key
   command: localectl set-x11-keymap "" "" "" caps:escape
+  ignore_errors: yes
   become: true
 
 - name: Install storage-space-alert
@@ -100,9 +103,15 @@
     mode: 0755
   become: true
 
-- name: Install dfm
+- name: Check for latest gog version
+  uri:
+    url: https://api.github.com/repos/andornaut/gog/releases/latest
+    return_content: "yes"
+  register: gog_version
+
+- name: Install gog
   get_url:
-    url: https://raw.githubusercontent.com/justone/dotfiles/master/bin/dfm
-    dest: /usr/local/bin/dfm
+    url: https://github.com/andornaut/gog/releases/download/{{ gog_version.json.tag_name }}/gog-linux-amd64
+    dest: /usr/local/bin/gog
     mode: 0755
   become: true
