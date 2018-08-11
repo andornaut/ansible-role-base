@@ -95,14 +95,21 @@
   ignore_errors: yes
   become: true
 
-- name: Install storage-space-alert
+- name: Install cache-command
   get_url:
-    url: https://raw.githubusercontent.com/andornaut/storage-space-alert/master/storage-space-alert
-    dest: /usr/local/bin/storage-space-alert
+    url: https://raw.githubusercontent.com/andornaut/cache-command/master/cache-command
+    dest: /usr/local/bin/
     mode: 0755
   become: true
 
-- name: Check for latest gog version
+- name: Install storage-space-alert
+  get_url:
+    url: https://raw.githubusercontent.com/andornaut/storage-space-alert/master/storage-space-alert
+    dest: /usr/local/bin/
+    mode: 0755
+  become: true
+
+- name: Check for the latest version of gog
   uri:
     url: https://api.github.com/repos/andornaut/gog/releases/latest
     return_content: "yes"
@@ -111,6 +118,6 @@
 - name: Install gog
   get_url:
     url: https://github.com/andornaut/gog/releases/download/{{ gog_version.json.tag_name }}/gog-linux-amd64
-    dest: /usr/local/bin/gog
+    dest: /usr/local/bin/
     mode: 0755
   become: true
