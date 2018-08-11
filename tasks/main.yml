@@ -11,6 +11,7 @@
     - atop
     - autotools-dev
     - bash
+    - bison
     - build-essential
     - ca-certificates
     - cifs-utils
