@@ -71,7 +71,7 @@
     - tmux
     - tree
     - ubuntu-drivers-common
-    - ubuntu-restricted-extras
+    #- ubuntu-restricted-extras
     - unzip
     - vim
     - wget
