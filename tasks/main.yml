@@ -57,7 +57,6 @@
     - openvpn
     - perl
     - powertop
-    - python-software-properties
     - ranger
     - rsync
     - rxvt-unicode-256color
