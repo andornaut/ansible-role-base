@@ -17,7 +17,6 @@
     - cifs-utils
     - cmake
     - coreutils
-    - cups
     - curl
     - debconf-utils
     - dnsutils
@@ -46,9 +45,7 @@
     - lm-sensors
     - make
     - mercurial
-    - mpv
     - mutt
-    - ncftp
     - nethogs
     - nmap
     - ntpdate
@@ -60,7 +57,6 @@
     - ranger
     - rsync
     - rxvt-unicode-256color
-    - samba
     - screen
     - smartmontools
     - smbclient
@@ -70,8 +66,6 @@
     - sysstat
     - tmux
     - tree
-    - ubuntu-drivers-common
-    #- ubuntu-restricted-extras
     - unzip
     - vim
     - wget
