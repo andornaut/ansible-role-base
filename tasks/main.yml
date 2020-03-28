@@ -1,24 +1,18 @@
 ---
 - name: Install system packages
   apt:
-    name: "{{ item }}"
-    state: latest
-    update_cache: yes
-  with_items:
+    name:
     - acpi
-    - apt-transport-https
     - atool
     - atop
     - autotools-dev
     - bash
-    - bison
     - build-essential
     - ca-certificates
     - cifs-utils
     - cmake
     - coreutils
     - curl
-    - debconf-utils
     - dnsutils
     - elinks
     - exfat-fuse
@@ -71,6 +65,8 @@
     - wget
     - whois
     - zip
+    state: latest
+    update_cache: yes
   become: true
 
 - name: Enable multiverse repositories
@@ -80,7 +76,7 @@
     - universe
   become: true
 
-- name: set timezone
+- name: Set timezone
   timezone:
     name: "{{ base_timezone }}"
   become: true
@@ -97,17 +93,5 @@
     mode: 0755
   become: true
 
-- name: Check for the latest version of gog
-  uri:
-    url: https://api.github.com/repos/andornaut/gog/releases/latest
-    return_content: "yes"
-  register: gog_version
-
-- name: Install gog
-  get_url:
-    url: https://github.com/andornaut/gog/releases/download/{{ gog_version.json.tag_name }}/gog-linux-amd64
-    dest: /usr/local/bin/
-    mode: 0755
-  become: true
-
+- import_tasks: gog.yml
 - import_tasks: storage-space-alert.yml

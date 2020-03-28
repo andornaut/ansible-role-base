@@ -1,0 +1,13 @@
+- name: Check for the latest version of gog
+  uri:
+    url: https://api.github.com/repos/andornaut/gog/releases/latest
+    return_content: "yes"
+  register: gog_version
+
+- name: Install gog
+  get_url:
+    url: https://github.com/andornaut/gog/releases/download/{{ gog_version.json.tag_name }}/gog-linux-amd64
+    dest: /usr/local/bin/
+    mode: 0755
+  become: true
+
