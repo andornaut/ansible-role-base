@@ -1,4 +1,4 @@
-- name: Check for the latest version of gog
+- name: Get the latest version of gog
   uri:
     url: https://api.github.com/repos/andornaut/gog/releases/latest
     return_content: "yes"
