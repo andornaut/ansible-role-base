@@ -41,6 +41,7 @@
       - mercurial
       - mutt
       - nethogs
+      - net-tools
       - nmap
       - ntpdate
       - openconnect
