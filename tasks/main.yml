@@ -72,8 +72,8 @@
     update_cache: yes
   become: true
 
-- name: Enable multiverse repositories
-  command: add-apt-repository {{ item }}
+- name: Enable multiverse and universe repositories
+  command: add-apt-repository -y {{ item }}
   with_items:
     - multiverse
     - universe
