@@ -1,0 +1,46 @@
+---
+# Configures the default timeouts for starting of units (Default: 90s)
+- name: Configure Systemd DefaultTimeoutStartSec
+  lineinfile:
+    path: /etc/systemd/system.conf
+    line: DefaultTimeoutStartSec=30
+    regexp: DefaultTimeoutStartSec
+  become: true
+  notify: Reload systemd
+
+# Configures the default timeouts for stopping of units (Default: 90s)
+- name: Configure Systemd DefaultTimeoutStopSec
+  lineinfile:
+    path: /etc/systemd/system.conf
+    line: DefaultTimeoutStopSec=30
+    regexp: DefaultTimeoutStopSec
+  become: true
+  notify: Reload systemd
+
+# Default time to sleep between automatic restarts of units (Default: 100s)
+- name: Configure Systemd DefaultRestartSec
+  lineinfile:
+    path: /etc/systemd/system.conf
+    line: DefaultRestartSec=30
+    regexp: DefaultRestartSec
+  become: true
+  notify: Reload systemd
+
+# Units which are started more than burst times within an interval time span are not permitted to start any more.
+# DefaultStartLimitBurst (Default: 5)
+- name: Configure Systemd DefaultStartLimitBurst
+  lineinfile:
+    path: /etc/systemd/system.conf
+    line: DefaultStartLimitBurst=3
+    regexp: DefaultStartLimitBurst
+  become: true
+  notify: Reload systemd
+
+# DefaultStartLimitIntervalSec (Default: 10s)
+- name: Configure Systemd DefaultStartLimitIntervalSec
+  lineinfile:
+    path: /etc/systemd/system.conf
+    line: DefaultStartLimitIntervalSec=15
+    regexp: DefaultStartLimitIntervalSec
+  become: true
+  notify: Reload systemd

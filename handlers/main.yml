@@ -1,4 +1,9 @@
 ---
+- name: Reload systemd
+  systemd:
+    daemon_reload: yes
+  become: true
+
 - name: Update font cache
   command: fc-cache
   become: true

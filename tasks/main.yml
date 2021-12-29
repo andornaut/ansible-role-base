@@ -101,3 +101,5 @@
 - import_tasks: mrs.yml
 
 - import_tasks: storage-space-alert.yml
+
+- import_tasks: systemd.yml
