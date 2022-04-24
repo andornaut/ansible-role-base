@@ -17,7 +17,6 @@
       - dnsutils
       - elinks
       - exfat-fuse
-      - exfat-utils
       - exuberant-ctags
       - fakeroot
       - fonts-font-awesome
@@ -52,7 +51,6 @@
       - powertop
       - ranger
       - rsync
-      - rxvt-unicode-256color
       - screen
       - smartmontools
       - smbclient
@@ -71,6 +69,26 @@
     state: latest
     update_cache: yes
   become: true
+
+- name: Install Ubuntu <22 system packages
+  apt:
+    name:
+      - exfat-utils
+      - rxvt-unicode-256color
+    install_recommends: no
+    state: latest
+  become: true
+  when: ansible_distribution_version is version('22.04', '<')
+
+- name: Install Ubuntu >=22 system packages
+  apt:
+    name:
+      - exfatprogs
+      - rxvt-unicode
+    install_recommends: no
+    state: latest
+  become: true
+  when: ansible_distribution_version is version('22.04', '>=')
 
 - name: Enable multiverse and universe repositories
   command: add-apt-repository -y {{ item }}
