@@ -3,6 +3,9 @@
   apt:
     name:
       - acpi
+      # Installs `setfacl` for:
+      # https://github.com/georchestra/ansible/issues/55#issuecomment-588313638
+      - acl
       - atool
       - atop
       - autoconf
