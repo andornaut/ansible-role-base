@@ -105,7 +105,7 @@
 
 - name: Re-map capslock key to escape key
   command: localectl set-x11-keymap "" "" "" caps:escape
-  ignore_errors: yes
+  ignore_errors: true
   become: true
 
 - name: Install cache-command
