@@ -115,6 +115,12 @@
     mode: 0755
   become: true
 
+- name: Make Vim the default editor
+  community.general.alternatives:
+    name: editor
+    path: /etc/alternatives/vim
+  become: true
+
 - import_tasks: gog.yml
 
 - import_tasks: mrs.yml
