@@ -38,6 +38,7 @@
       - libfontconfig
       - libfreetype6
       - libfreetype6-dev
+      - libfuse2
       - linux-firmware
       - lm-sensors
       - make
