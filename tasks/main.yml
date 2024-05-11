@@ -66,6 +66,7 @@
       - tree
       - unrar
       - unzip
+      - update-manager-core
       - vim
       - wget
       - whois
