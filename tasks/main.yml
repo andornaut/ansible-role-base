@@ -9,6 +9,7 @@
       - atool
       - atop
       - autoconf
+      - autoconf-archive
       - autotools-dev
       - bash
       - build-essential
