@@ -100,6 +100,15 @@
     - universe
   become: true
 
+# https://askubuntu.com/a/1254303
+- name: Disable ssh motd news/advertisement
+  lineinfile:
+    create: true
+    line: 'ENABLED=0'
+    path: /etc/default/motd-news
+    regexp: '^ENABLED\s*='
+  become: true
+
 - name: Set timezone
   timezone:
     name: "{{ base_timezone }}"
