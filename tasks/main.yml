@@ -115,9 +115,12 @@
   become: true
 
 - name: Re-map capslock key to escape key
-  command: localectl set-x11-keymap "" "" "" caps:escape
-  ignore_errors: true
+  lineinfile:
+    line: 'XKBOPTIONS="caps:escape"'
+    path: /etc/default/keyboard
+    regexp: '^XKBOPTIONS\s*='
   become: true
+  notify: Apply keyboard changes
 
 - name: Install cache-command
   get_url:

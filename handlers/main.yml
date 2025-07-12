@@ -7,3 +7,7 @@
 - name: Update font cache
   command: fc-cache
   become: true
+
+- name: Apply keyboard changes
+  command: udevadm trigger --subsystem-match=input --action=change
+  become: true
