@@ -5,10 +5,21 @@
     return_content: "yes"
   register: mrs_version
 
+- name: Set architecture variable for x86_64
+  set_fact:
+    mrs_arch: "x86_64"
+  when: ansible_architecture == "x86_64"
+
+- name: Set architecture variable for aarch64
+  set_fact:
+    mrs_arch: "arm64"
+  when: ansible_architecture == "aarch64"
+
 - name: Install mrs
-  get_url:
-    url: https://github.com/andornaut/mrs/releases/download/{{ mrs_version.json.tag_name }}/mrs-linux-amd64
-    dest: /usr/local/bin/mrs
+  unarchive:
+    src: "https://github.com/andornaut/mrs/releases/download/{{ mrs_version.json.tag_name }}/mrs_{{ ansible_system | lower }}_{{ mrs_arch }}.tar.gz"
+    dest: /usr/local/bin
+    remote_src: yes
+    include: ["mrs"]
     mode: 0755
   become: true
-
