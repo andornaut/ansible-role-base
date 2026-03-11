@@ -8,16 +8,16 @@
 - name: Set architecture variable for x86_64
   set_fact:
     gog_arch: "x86_64"
-  when: ansible_architecture == "x86_64"
+  when: ansible_facts.architecture == "x86_64"
 
 - name: Set architecture variable for aarch64
   set_fact:
     gog_arch: "arm64"
-  when: ansible_architecture == "aarch64"
+  when: ansible_facts.architecture == "aarch64"
 
 - name: Install gog
   unarchive:
-    src: "https://github.com/andornaut/gog/releases/download/{{ gog_version.json.tag_name }}/gog_{{ ansible_system | lower }}_{{ gog_arch }}.tar.gz"
+    src: "https://github.com/andornaut/gog/releases/download/{{ gog_version.json.tag_name }}/gog_{{ ansible_facts.system | lower }}_{{ gog_arch }}.tar.gz"
     dest: /usr/local/bin
     remote_src: yes
     include: ["gog"]

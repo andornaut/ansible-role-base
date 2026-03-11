@@ -82,7 +82,7 @@
     install_recommends: no
     state: latest
   become: true
-  when: ansible_distribution_version is version('22.04', '<')
+  when: ansible_facts.distribution_version is version('22.04', '<')
 
 - name: Install Ubuntu >=22 system packages
   apt:
@@ -91,7 +91,7 @@
     install_recommends: no
     state: latest
   become: true
-  when: ansible_distribution_version is version('22.04', '>=')
+  when: ansible_facts.distribution_version is version('22.04', '>=')
 
 - name: Enable multiverse and universe repositories
   command: add-apt-repository -y {{ item }}
