@@ -1,7 +1,7 @@
 ---
 # Configures the default timeouts for starting of units (Default: 90s)
 - name: Configure Systemd DefaultTimeoutStartSec
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/systemd/system.conf
     line: DefaultTimeoutStartSec=30
     regexp: DefaultTimeoutStartSec
@@ -10,7 +10,7 @@
 
 # Configures the default timeouts for stopping of units (Default: 90s)
 - name: Configure Systemd DefaultTimeoutStopSec
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/systemd/system.conf
     line: DefaultTimeoutStopSec=30
     regexp: DefaultTimeoutStopSec
@@ -19,7 +19,7 @@
 
 # Default time to sleep between automatic restarts of units (Default: 100s)
 - name: Configure Systemd DefaultRestartSec
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/systemd/system.conf
     line: DefaultRestartSec=30
     regexp: DefaultRestartSec
@@ -29,7 +29,7 @@
 # Units which are started more than burst times within an interval time span are not permitted to start any more.
 # DefaultStartLimitBurst (Default: 5)
 - name: Configure Systemd DefaultStartLimitBurst
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/systemd/system.conf
     line: DefaultStartLimitBurst=3
     regexp: DefaultStartLimitBurst
@@ -38,7 +38,7 @@
 
 # DefaultStartLimitIntervalSec (Default: 10s)
 - name: Configure Systemd DefaultStartLimitIntervalSec
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/systemd/system.conf
     line: DefaultStartLimitIntervalSec=15
     regexp: DefaultStartLimitIntervalSec

@@ -1,25 +1,25 @@
 ---
 - name: Get the latest version of gog
-  uri:
+  ansible.builtin.uri:
     url: https://api.github.com/repos/andornaut/gog/releases/latest
-    return_content: "yes"
+    return_content: true
   register: gog_version
 
 - name: Set architecture variable for x86_64
-  set_fact:
+  ansible.builtin.set_fact:
     gog_arch: "x86_64"
   when: ansible_facts.architecture == "x86_64"
 
 - name: Set architecture variable for aarch64
-  set_fact:
+  ansible.builtin.set_fact:
     gog_arch: "arm64"
   when: ansible_facts.architecture == "aarch64"
 
 - name: Install gog
-  unarchive:
+  ansible.builtin.unarchive:
     src: "https://github.com/andornaut/gog/releases/download/{{ gog_version.json.tag_name }}/gog_{{ ansible_facts.system | lower }}_{{ gog_arch }}.tar.gz"
     dest: /usr/local/bin
-    remote_src: yes
+    remote_src: true
     include: ["gog"]
-    mode: 0755
+    mode: "0755"
   become: true

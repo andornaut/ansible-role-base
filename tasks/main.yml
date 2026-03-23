@@ -1,6 +1,6 @@
 ---
 - name: Install system packages
-  apt:
+  ansible.builtin.apt:
     name:
       - acpi
       # Installs `setfacl` for:
@@ -71,41 +71,43 @@
       - wget
       - whois
       - zip
-    state: latest
-    update_cache: yes
+    state: present
+    update_cache: true
   become: true
 
 - name: Install exfat packages
-  apt:
+  ansible.builtin.apt:
     name:
       - exfatprogs
-    install_recommends: no
-    state: latest
+    install_recommends: false
+    state: present
   become: true
 
 - name: Enable multiverse and universe repositories
-  command: add-apt-repository -y {{ item }}
+  ansible.builtin.command: add-apt-repository -y {{ item }}
   with_items:
     - multiverse
     - universe
+  changed_when: true
   become: true
 
 # https://askubuntu.com/a/1254303
 - name: Disable ssh motd news/advertisement
-  lineinfile:
+  ansible.builtin.lineinfile:
     create: true
     line: 'ENABLED=0'
     path: /etc/default/motd-news
     regexp: '^ENABLED\s*='
+    mode: "0644"
   become: true
 
 - name: Set timezone
-  timezone:
+  community.general.timezone:
     name: "{{ base_timezone }}"
   become: true
 
 - name: Re-map capslock key to escape key
-  lineinfile:
+  ansible.builtin.lineinfile:
     line: 'XKBOPTIONS="caps:escape"'
     path: /etc/default/keyboard
     regexp: '^XKBOPTIONS\s*='
@@ -113,10 +115,10 @@
   notify: Apply keyboard changes
 
 - name: Install cache-command
-  get_url:
+  ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/andornaut/cache-command/master/cache-command
     dest: /usr/local/bin/
-    mode: 0755
+    mode: "0755"
   become: true
 
 - name: Make Vim the default editor
@@ -125,10 +127,14 @@
     path: /etc/alternatives/vim
   become: true
 
-- import_tasks: gog.yml
+- name: Import gog tasks
+  ansible.builtin.import_tasks: gog.yml
 
-- import_tasks: mrs.yml
+- name: Import mrs tasks
+  ansible.builtin.import_tasks: mrs.yml
 
-- import_tasks: storage-space-alert.yml
+- name: Import storage-space-alert tasks
+  ansible.builtin.import_tasks: storage-space-alert.yml
 
-- import_tasks: systemd.yml
+- name: Import systemd tasks
+  ansible.builtin.import_tasks: systemd.yml
