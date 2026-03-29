@@ -83,12 +83,14 @@
     state: present
   become: true
 
-- name: Enable multiverse and universe repositories
-  ansible.builtin.command: add-apt-repository -y {{ item }}
-  with_items:
-    - multiverse
-    - universe
-  changed_when: true
+- name: Enable multiverse repository
+  ansible.builtin.apt_repository:
+    repo: multiverse
+  become: true
+
+- name: Enable universe repository
+  ansible.builtin.apt_repository:
+    repo: universe
   become: true
 
 # https://askubuntu.com/a/1254303
@@ -111,6 +113,7 @@
     line: 'XKBOPTIONS="caps:escape"'
     path: /etc/default/keyboard
     regexp: '^XKBOPTIONS\s*='
+    mode: "0644"
   become: true
   notify: Apply keyboard changes
 
