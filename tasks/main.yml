@@ -48,7 +48,6 @@
       - nethogs
       - net-tools
       - nmap
-      - ntpdate
       - openconnect
       - openvpn
       - perl
@@ -74,6 +73,14 @@
     state: present
     update_cache: true
   become: true
+
+- name: Install system packages (Ubuntu 24.x only)
+  ansible.builtin.apt:
+    name:
+      - ntpdate
+    state: present
+  become: true
+  when: ansible_facts["distribution_version"] is version('25', '<')
 
 - name: Install exfat packages
   ansible.builtin.apt:
