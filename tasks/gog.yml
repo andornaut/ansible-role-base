@@ -4,6 +4,9 @@
     url: https://api.github.com/repos/andornaut/gog/releases/latest
     return_content: true
   register: gog_version
+  until: gog_version.status == 200
+  retries: 5
+  delay: 10
 
 - name: Set architecture variable for x86_64
   ansible.builtin.set_fact:
