@@ -39,7 +39,6 @@
       - libfontconfig
       - libfreetype6
       - libfreetype6-dev
-      - libfuse2
       - linux-firmware
       - lm-sensors
       - make
@@ -90,14 +89,22 @@
     state: present
   become: true
 
-- name: Enable multiverse repository
-  ansible.builtin.apt_repository:
-    repo: multiverse
+- name: Install fuse2 library
+  ansible.builtin.apt:
+    # Renamed to libfuse2t64 by the 64-bit time_t transition on Ubuntu 24.04+.
+    name: "{{ 'libfuse2t64' if ansible_facts['distribution_version'] is version('24.04', '>=') else 'libfuse2' }}"
+    state: present
   become: true
 
-- name: Enable universe repository
+- name: Enable universe and multiverse repositories
   ansible.builtin.apt_repository:
-    repo: universe
+    repo: "{{ item }}"
+  loop:
+    - universe
+    - multiverse
+  # Ubuntu 24.04+ uses the deb822 sources format with no legacy sources.list, where
+  # these components are enabled by default and the shorthand repo name is invalid.
+  when: ansible_facts["distribution_version"] is version('24.04', '<')
   become: true
 
 # https://askubuntu.com/a/1254303
