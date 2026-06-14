@@ -146,5 +146,8 @@
 - name: Import storage-space-alert tasks
   ansible.builtin.import_tasks: storage-space-alert.yml
 
+- name: Import disk-cleanup tasks
+  ansible.builtin.import_tasks: disk-cleanup.yml
+
 - name: Import systemd tasks
   ansible.builtin.import_tasks: systemd.yml

@@ -44,3 +44,22 @@
     regexp: DefaultStartLimitIntervalSec
   become: true
   notify: Reload systemd
+
+# Cap total journal disk usage (Default: 10% of the filesystem).
+- name: Configure journald SystemMaxUse
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/journald.conf
+    line: SystemMaxUse=500M
+    regexp: '^#?\s*SystemMaxUse\s*='
+  become: true
+  notify: Restart systemd-journald
+
+# Cap journal retention by age. Combined with SystemMaxUse, journald vacuums
+# logs whenever either limit is reached, whichever comes first (Default: none).
+- name: Configure journald MaxRetentionSec
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/journald.conf
+    line: MaxRetentionSec=4week
+    regexp: '^#?\s*MaxRetentionSec\s*='
+  become: true
+  notify: Restart systemd-journald
