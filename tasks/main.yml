@@ -1,4 +1,16 @@
 ---
+- name: Configure apt network timeouts and retries
+  # Bound apt fetches so a stalled mirror connection cannot hang indefinitely
+  # (e.g. holding the lists lock and blocking unattended/cron apt runs).
+  ansible.builtin.copy:
+    dest: /etc/apt/apt.conf.d/99network-timeouts
+    content: |
+      Acquire::http::Timeout "30";
+      Acquire::https::Timeout "30";
+      Acquire::Retries "3";
+    mode: "0644"
+  become: true
+
 - name: Install system packages
   ansible.builtin.apt:
     name:
