@@ -1,2 +1,3 @@
 ---
+base_remap_capslock_to_escape: false
 base_timezone: America/Toronto

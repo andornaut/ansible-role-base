@@ -142,6 +142,7 @@
     mode: "0644"
   become: true
   notify: Apply keyboard changes
+  when: base_remap_capslock_to_escape
 
 - name: Install cache-command
   ansible.builtin.get_url:
