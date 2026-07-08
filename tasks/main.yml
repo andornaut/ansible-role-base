@@ -55,7 +55,6 @@
       - lm-sensors
       - make
       - mercurial
-      - mutt
       - nethogs
       - net-tools
       - nmap
@@ -63,7 +62,6 @@
       - openvpn
       - perl
       - powertop
-      - ranger
       - rsync
       - screen
       - smartmontools
