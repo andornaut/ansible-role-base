@@ -16,3 +16,8 @@ journalctl --vacuum-size=500M --vacuum-time=4weeks
 if command -v docker >/dev/null 2>&1; then
     docker system prune --all --force
 fi
+
+# Remove flatpak runtimes and extensions no longer referenced by any app.
+if command -v flatpak >/dev/null 2>&1; then
+    flatpak uninstall --unused --assumeyes
+fi
