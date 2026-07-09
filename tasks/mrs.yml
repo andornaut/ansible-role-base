@@ -5,19 +5,9 @@
     return_content: true
   register: mrs_version
 
-- name: Set architecture variable for x86_64
-  ansible.builtin.set_fact:
-    mrs_arch: "x86_64"
-  when: ansible_facts.architecture == "x86_64"
-
-- name: Set architecture variable for aarch64
-  ansible.builtin.set_fact:
-    mrs_arch: "arm64"
-  when: ansible_facts.architecture == "aarch64"
-
 - name: Install mrs
   ansible.builtin.unarchive:
-    src: "https://github.com/andornaut/mrs/releases/download/{{ mrs_version.json.tag_name }}/mrs_{{ ansible_facts.system | lower }}_{{ mrs_arch }}.tar.gz"
+    src: "https://github.com/andornaut/mrs/releases/download/{{ mrs_version.json.tag_name }}/mrs_{{ ansible_facts['system'] | lower }}_{{ base_arch }}.tar.gz"
     dest: /usr/local/bin
     remote_src: true
     include: ["mrs"]
