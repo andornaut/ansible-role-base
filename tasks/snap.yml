@@ -49,3 +49,32 @@
         path: "{{ item.path | default(item) }}"
         state: absent
       loop: "{{ base_snap_directories_result.files + ['/root/snap', '/var/cache/snapd'] }}"
+
+    # snapd enables its user services by symlinking them into the per-user
+    # ~/.config/systemd/user/*.wants directories. Purging snapd deletes the units but
+    # leaves those symlinks behind, dangling. They are not harmless: a .wants entry is
+    # resolved by unit name rather than through the link, so the dependency outlives the
+    # unit and systemd reports it as not-found at every login.
+    - name: Find user systemd unit directories
+      ansible.builtin.find:
+        paths: /home
+        depth: 1
+        file_type: directory
+      register: base_home_directories_result
+
+    - name: Find leftover snap enable symlinks
+      ansible.builtin.find:
+        paths: "{{ (base_home_directories_result.files | map(attribute='path') | list + ['/root'])
+          | product(['/.config/systemd/user']) | map('join') | list }}"
+        patterns: snap.*
+        file_type: link
+        recurse: true
+      register: base_snap_links_result
+
+    - name: Remove the discovered snap enable symlinks
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+      loop: "{{ base_snap_links_result.files }}"
+      loop_control:
+        label: "{{ item.path }}"
