@@ -1,0 +1,53 @@
+---
+- name: Disable telemetry and crash reporting
+  become: true
+  block:
+    # Ubuntu enables several reporters by default: apport traps crashes and writes them
+    # to /var/crash, whoopsie uploads them to Canonical, kerneloops uploads kernel
+    # oopses, ubuntu-report sends a hardware and installation survey, and
+    # popularity-contest reports which packages are installed.
+    #
+    # autoremove and clean are deliberately omitted, matching snap.yml: disk-cleanup
+    # already runs `apt-get autoremove --purge` weekly, and sweeping orphans from here
+    # would remove unrelated packages as a side effect.
+    - name: Purge telemetry packages
+      ansible.builtin.apt:
+        name: "{{ base_telemetry_packages }}"
+        purge: true
+        state: absent
+
+    # ubuntu-server and ubuntu-server-minimal Depend on apport, so the pin makes
+    # `apt dist-upgrade` remove them rather than reinstall apport. That is already the
+    # case on every host here: snap.yml's purge of snapd removed ubuntu-server-minimal
+    # for the same reason, and ubuntu-server with it. Desktop metapackages only Recommend
+    # these, so nothing else is disturbed. See the longer note in snap.yml.
+    - name: Pin telemetry packages
+      ansible.builtin.copy:
+        content: |
+          Package: {{ base_telemetry_packages | join(' ') }}
+          Pin: release a=*
+          Pin-Priority: -1
+        dest: /etc/apt/preferences.d/no-telemetry
+        mode: "0644"
+
+    # Belt and braces: if apport is ever reinstalled by hand, it reads this file at boot
+    # and will not install its kernel core_pattern hook.
+    - name: Disable apport
+      ansible.builtin.lineinfile:
+        create: true
+        line: enabled=0
+        path: /etc/default/apport
+        regexp: '^enabled\s*='
+        mode: "0644"
+
+    # update-notifier-crash.service is `static`, so it cannot be disabled, only masked.
+    # It runs at every graphical login, and `set -e` plus an unguarded `which whoopsie`
+    # makes it exit non-zero whenever whoopsie is absent, which leaves the user manager
+    # in a degraded state. Masking in /etc/systemd/user covers every user on the host.
+    - name: Mask update-notifier-crash.service for all users
+      ansible.builtin.file:
+        dest: /etc/systemd/user/update-notifier-crash.service
+        force: true
+        src: /dev/null
+        state: link
+      notify: Reload systemd

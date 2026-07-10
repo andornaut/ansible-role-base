@@ -174,3 +174,6 @@
 
 - name: Import systemd tasks
   ansible.builtin.import_tasks: systemd.yml
+
+- name: Import telemetry tasks
+  ansible.builtin.import_tasks: telemetry.yml
