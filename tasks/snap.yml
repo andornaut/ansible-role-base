@@ -62,11 +62,16 @@
         file_type: directory
       register: base_home_directories_result
 
+    # Both patterns are needed: `snap.*` matches the per-snap units (snap.foo.bar.service),
+    # while snapd's own user units are snapd.session-agent.service and .socket, which the
+    # first glob does not match because it requires a literal dot after "snap".
     - name: Find leftover snap enable symlinks
       ansible.builtin.find:
         paths: "{{ (base_home_directories_result.files | map(attribute='path') | list + ['/root'])
           | product(['/.config/systemd/user']) | map('join') | list }}"
-        patterns: snap.*
+        patterns:
+          - snap.*
+          - snapd.*
         file_type: link
         recurse: true
       register: base_snap_links_result
