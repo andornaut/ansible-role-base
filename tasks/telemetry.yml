@@ -16,6 +16,34 @@
         purge: true
         state: absent
 
+    # ubuntu-insights keeps per-user state that purging the package does not touch:
+    # consent files in ~/.config/ubuntu-insights and queued and uploaded reports in
+    # ~/.cache/ubuntu-insights. Sweep every home rather than one user's, because any
+    # account that logged in before the purge has its own copy.
+    #
+    # depth 3 is what bounds the scan: the targets sit at <home>/.cache/ubuntu-insights,
+    # three levels below /home. recurse descends into dotted directories on its own, so
+    # `hidden` is not needed here; that option only decides whether hidden entries are
+    # themselves returned, and ubuntu-insights is not hidden.
+    - name: Find leftover ubuntu-insights user state
+      ansible.builtin.find:
+        depth: 3
+        file_type: directory
+        paths:
+          - /home
+          - /root
+        patterns: ubuntu-insights
+        recurse: true
+      register: base_telemetry_insights_state
+
+    - name: Remove leftover ubuntu-insights user state
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+      loop: "{{ base_telemetry_insights_state.files }}"
+      loop_control:
+        label: "{{ item.path }}"
+
     # ubuntu-server and ubuntu-server-minimal Depend on apport, so the pin makes
     # `apt dist-upgrade` remove them rather than reinstall apport. That is already the
     # case on every host here: snap.yml's purge of snapd removed ubuntu-server-minimal
