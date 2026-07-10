@@ -12,12 +12,9 @@ base_snap_packages:
   - gnome-software-plugin-snap
   - snapd
 
-# Purged and then negatively pinned by tasks/telemetry.yml, so apt cannot bring them
-# back. apport-core-dump-handler Depends on apport, so it is removed alongside it and
-# listed here only so the pin stops apt reinstalling it, which would drag apport back.
+# Purged and then negatively pinned by tasks/telemetry.yml, so apt cannot bring them back.
 base_telemetry_packages:
   - apport
-  - apport-core-dump-handler
   - kerneloops
   - popularity-contest
   - ubuntu-report

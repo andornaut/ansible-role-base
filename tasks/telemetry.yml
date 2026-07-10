@@ -30,29 +30,22 @@
         dest: /etc/apt/preferences.d/no-telemetry
         mode: "0644"
 
-    # Belt and braces: if apport is ever reinstalled by hand, it reads this file at boot
-    # and will not install its kernel core_pattern hook.
-    - name: Disable apport
-      ansible.builtin.lineinfile:
-        create: true
-        line: enabled=0
-        path: /etc/default/apport
-        regexp: '^enabled\s*='
-        mode: "0644"
-
-    # update-notifier-crash.service is `static`, so it cannot be disabled, only masked.
-    # It runs at every graphical login, and `set -e` plus an unguarded `which whoopsie`
-    # makes it exit non-zero whenever whoopsie is absent, which leaves the user manager
-    # in a degraded state. Masking in /etc/systemd/user covers every user on the host.
+    # update-notifier-crash.service is `static`, so it cannot be disabled, only masked,
+    # and `set -e` plus an unguarded `which whoopsie` makes it exit non-zero once whoopsie
+    # is purged. The .path unit is what triggers it, on PathChanged=/var/crash/, and it is
+    # pulled into graphical-session.target by update-notifier itself, so masking only the
+    # service would leave the trigger armed and merely move the failure to the triggered
+    # job. Mask both. Masking in /etc/systemd/user covers every user on the host.
     #
-    # No handler is notified. The Reload systemd handler reloads the system manager,
-    # which never reads /etc/systemd/user, so notifying it would report a change that
-    # did not happen. A per-user manager picks the mask up the next time it loads units,
-    # so a session already running when this first applies needs an explicit
-    # `systemctl --user daemon-reload`.
-    - name: Mask update-notifier-crash.service for all users
+    # No handler: Reload systemd reloads the system manager, which never reads
+    # /etc/systemd/user. A per-user manager picks the mask up when it next loads units,
+    # so a session already running needs `systemctl --user daemon-reload`.
+    - name: Mask update-notifier-crash units for all users
       ansible.builtin.file:
-        dest: /etc/systemd/user/update-notifier-crash.service
+        dest: "/etc/systemd/user/{{ item }}"
         force: true
         src: /dev/null
         state: link
+      loop:
+        - update-notifier-crash.path
+        - update-notifier-crash.service

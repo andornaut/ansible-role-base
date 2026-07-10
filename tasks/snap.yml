@@ -58,7 +58,6 @@
     - name: Find user systemd unit directories
       ansible.builtin.find:
         paths: /home
-        depth: 1
         file_type: directory
       register: base_home_directories_result
 
@@ -72,6 +71,7 @@
         patterns:
           - snap.*
           - snapd.*
+        depth: 2
         file_type: link
         recurse: true
       register: base_snap_links_result
