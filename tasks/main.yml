@@ -11,6 +11,11 @@
     mode: "0644"
   become: true
 
+# Imported ahead of the apt tasks below so the negative pin is in place before anything
+# has a chance to pull snapd back in as a recommended dependency.
+- name: Import snap tasks
+  ansible.builtin.import_tasks: snap.yml
+
 - name: Install system packages
   ansible.builtin.apt:
     name:
