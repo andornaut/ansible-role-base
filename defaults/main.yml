@@ -17,6 +17,7 @@ base_telemetry_packages:
   - apport
   - kerneloops
   - popularity-contest
+  - ubuntu-insights
   - ubuntu-report
   - whoopsie
 
