@@ -8,32 +8,11 @@
     # ubuntu-standard, and the Recommends of docker-ce/man-db/rsyslog hold those
     # packages in place. The only cost is that a release upgrade will no longer add
     # newly-introduced server defaults on its own.
-    #
-    # autoremove and clean are deliberately omitted: disk-cleanup already runs
-    # `apt-get autoremove --purge` weekly, and sweeping orphans from here would remove
-    # unrelated packages as a side effect of removing snap.
-    - name: Purge snap packages
-      ansible.builtin.apt:
-        name: "{{ base_snap_packages }}"
-        purge: true
-        state: absent
-
-    # dpkg discards a hold for a package it has no record of (state "un"), which is the
-    # case for the ones it never knew, so a hold could not keep them uninstalled. A
-    # negative pin does, regardless of dpkg state. apt_preferences(5) takes several
-    # names on one Package: line, so this is one record rather than one per package.
-    #
-    # A negative pin is stronger than a hold in two ways worth knowing: apt will not
-    # install these even to satisfy another package's dependency, and `apt dist-upgrade`
-    # removes any of them that is somehow installed rather than leaving it alone.
-    - name: Pin snap packages
-      ansible.builtin.copy:
-        content: |
-          Package: {{ base_snap_packages | join(' ') }}
-          Pin: release a=*
-          Pin-Priority: -1
-        dest: /etc/apt/preferences.d/no-snap
-        mode: "0644"
+    - name: Purge and pin snap packages
+      ansible.builtin.include_tasks: purge-and-pin.yml
+      vars:
+        purge_pin_name: snap
+        purge_pin_packages: "{{ base_snap_packages }}"
 
     - name: Find user snap directories
       ansible.builtin.find:
