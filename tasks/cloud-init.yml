@@ -1,0 +1,43 @@
+---
+- name: Remove cloud-init
+  become: true
+  block:
+    # cloud-init is the first-boot provisioning agent the Ubuntu Server installer seeds;
+    # nothing here uses it, and after install it sits inert behind
+    # /etc/cloud/cloud-init.disabled. It arrives as a Recommends of the desktop and server
+    # metapackages (via cloud-init-base), so purging alone would let a later dist-upgrade
+    # pull it back; the pin below prevents that. Purging both packages drags nothing else
+    # out: the metapackages only Recommend it.
+    #
+    # autoremove and clean are deliberately omitted, matching snap.yml: disk-cleanup
+    # already runs `apt-get autoremove --purge` weekly, and sweeping orphans from here
+    # would remove unrelated packages as a side effect.
+    - name: Purge cloud-init packages
+      ansible.builtin.apt:
+        name: "{{ base_cloud_init_packages }}"
+        purge: true
+        state: absent
+
+    # A negative pin holds regardless of dpkg state (including the "un" state of a package
+    # the host never installed), so apt will not add these to satisfy a Recommends and
+    # `apt dist-upgrade` removes any that reappear. See the longer note in snap.yml.
+    - name: Pin cloud-init packages
+      ansible.builtin.copy:
+        content: |
+          Package: {{ base_cloud_init_packages | join(' ') }}
+          Pin: release a=*
+          Pin-Priority: -1
+        dest: /etc/apt/preferences.d/no-cloud-init
+        mode: "0644"
+
+    # The installer's drop-ins under /etc/cloud/cloud.cfg.d/ (subiquity/curtin) and the
+    # runtime state in /var/lib/cloud are not owned by the packages, so purge leaves them.
+    # /etc/netplan is left untouched: subiquity wrote a static config there and disabled
+    # cloud-init networking, so nothing regenerates it.
+    - name: Remove leftover cloud-init directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /etc/cloud
+        - /var/lib/cloud

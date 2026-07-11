@@ -7,6 +7,11 @@ base_arch: >-
 
 base_remap_capslock_to_escape: false
 
+# Purged and then negatively pinned by tasks/cloud-init.yml, so apt cannot bring them back.
+base_cloud_init_packages:
+  - cloud-init
+  - cloud-init-base
+
 # Purged and then negatively pinned by tasks/snap.yml, so apt cannot bring them back.
 base_snap_packages:
   - gnome-software-plugin-snap

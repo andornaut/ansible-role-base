@@ -16,6 +16,11 @@
 - name: Import snap tasks
   ansible.builtin.import_tasks: snap.yml
 
+# Imported early for the same reason as snap: pin cloud-init out before any apt install
+# runs, so a Recommends cannot pull it back in mid-run.
+- name: Import cloud-init tasks
+  ansible.builtin.import_tasks: cloud-init.yml
+
 - name: Install system packages
   ansible.builtin.apt:
     name:
